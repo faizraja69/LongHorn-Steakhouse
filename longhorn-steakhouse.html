@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LongHorn Steakhouse — Davenport, FL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  /* ─── RESET & VARIABLES ─────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --charcoal:  #1a1a1a;
+    --charcoal2: #252525;
+    --charcoal3: #2f2f2f;
+    --gold:      #c9a84c;
+    --gold-lt:   #e2c97e;
+    --gold-dk:   #a07830;
+    --white:     #faf8f4;
+    --off-white: #f0ebe0;
+    --gray:      #888880;
+    --serif:     'Cormorant Garamond', Georgia, serif;
+    --display:   'Cinzel', serif;
+    --sans:      'Jost', sans-serif;
+    --transition: 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    background: var(--charcoal);
+    color: var(--white);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  button { cursor: pointer; border: none; outline: none; background: none; font-family: inherit; }
+
+  /* ─── SCROLLBAR ─────────────────────────────────────────────────── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--charcoal); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  /* ─── REVEAL ANIMATIONS ─────────────────────────────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left  { opacity: 0; transform: translateX(-50px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal-right { opacity: 0; transform: translateX(50px);  transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal-left.visible, .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+  /* ─── NAV ───────────────────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.4rem 4rem;
+    transition: background var(--transition), padding var(--transition);
+  }
+  nav.scrolled {
+    background: rgba(20,18,14,0.96);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    padding: 0.9rem 4rem;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+  .nav-logo {
+    font-family: var(--display);
+    font-size: 1.15rem;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--white); }
+  .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(250,248,244,0.75);
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.6rem;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    transition: all 0.3s;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--charcoal); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 1.5px; background: var(--gold); transition: all 0.3s; }
+  .mobile-menu {
+    display: none; position: fixed; inset: 0; z-index: 99;
+    background: rgba(20,18,14,0.98);
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 2rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: var(--display);
+    font-size: 1.6rem;
+    letter-spacing: 0.1em;
+    color: var(--white);
+  }
+  .mobile-menu a:hover { color: var(--gold); }
+
+  /* ─── HERO ──────────────────────────────────────────────────────── */
+  #hero {
+    position: relative;
+    height: 100svh; min-height: 640px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(20,18,14,0.45) 0%, rgba(20,18,14,0.6) 60%, rgba(20,18,14,0.92) 100%),
+      url('https://images.unsplash.com/photo-1600891964092-4316c288032e?w=1800&q=80') center/cover no-repeat;
+    transform: scale(1.05);
+    animation: heroZoom 12s ease-in-out infinite alternate;
+  }
+  @keyframes heroZoom {
+    from { transform: scale(1.05); }
+    to   { transform: scale(1.12); }
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 820px; padding: 0 2rem; }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    animation: fadeUp 1s ease 0.3s both;
+  }
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: '—';
+    margin: 0 0.8rem;
+    opacity: 0.5;
+  }
+  .hero-title {
+    font-family: var(--display);
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: 0.04em;
+    margin-bottom: 1.2rem;
+    animation: fadeUp 1s ease 0.5s both;
+  }
+  .hero-title em { color: var(--gold); font-style: italic; font-family: var(--serif); }
+  .hero-tagline {
+    font-family: var(--serif);
+    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+    font-style: italic;
+    color: rgba(250,248,244,0.78);
+    margin-bottom: 2.8rem;
+    animation: fadeUp 1s ease 0.7s both;
+  }
+  .hero-btns {
+    display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 1s ease 0.9s both;
+  }
+  .btn-primary {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 1rem 2.6rem;
+    background: var(--gold);
+    color: var(--charcoal);
+    font-weight: 500;
+    transition: all 0.35s;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold-lt);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-secondary {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 1rem 2.6rem;
+    border: 1px solid rgba(250,248,244,0.5);
+    color: var(--white);
+    transition: all 0.35s;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(250,248,244,0.45);
+    animation: fadeUp 1s ease 1.3s both;
+  }
+  .scroll-line {
+    width: 1px; height: 50px; background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%,100% { transform: scaleY(1); opacity: 1; }
+    50% { transform: scaleY(0.6); opacity: 0.4; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── SECTION COMMONS ───────────────────────────────────────────── */
+  section { padding: 7rem 4rem; }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-family: var(--display);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: 0.04em;
+  }
+  .gold-rule {
+    width: 60px; height: 2px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    margin: 1.6rem 0;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* ─── ABOUT ─────────────────────────────────────────────────────── */
+  #about { background: var(--charcoal2); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .about-img-wrap {
+    position: relative;
+  }
+  .about-img-wrap::before {
+    content: '';
+    position: absolute;
+    top: -20px; left: -20px;
+    right: 20px; bottom: 20px;
+    border: 1px solid rgba(201,168,76,0.25);
+    pointer-events: none;
+  }
+  .about-img {
+    width: 100%; height: 520px;
+    object-fit: cover;
+    filter: brightness(0.9) contrast(1.05);
+  }
+  .about-badge {
+    position: absolute;
+    bottom: -2rem; right: -2rem;
+    width: 120px; height: 120px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: var(--charcoal);
+    font-family: var(--display);
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    line-height: 1.3;
+    font-weight: 700;
+  }
+  .about-badge strong { font-size: 2rem; display: block; line-height: 1; }
+  .about-text p {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    color: rgba(250,248,244,0.78);
+    margin-bottom: 1.4rem;
+    line-height: 1.8;
+  }
+  .about-stats {
+    display: flex; gap: 3rem; margin-top: 2.5rem;
+    border-top: 1px solid rgba(201,168,76,0.2);
+    padding-top: 2rem;
+  }
+  .stat-item { text-align: left; }
+  .stat-num {
+    font-family: var(--display);
+    font-size: 2.4rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-top: 0.3rem;
+  }
+
+  /* ─── MENU ──────────────────────────────────────────────────────── */
+  #menu { background: var(--charcoal); }
+  .menu-header { text-align: center; margin-bottom: 3.5rem; }
+  .menu-header .gold-rule { margin: 1.6rem auto; }
+  .menu-tabs {
+    display: flex; gap: 0; justify-content: center;
+    border: 1px solid rgba(201,168,76,0.25);
+    width: fit-content; margin: 0 auto 3.5rem;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.85rem 2rem;
+    color: var(--gray);
+    border-right: 1px solid rgba(201,168,76,0.25);
+    transition: all 0.3s;
+  }
+  .tab-btn:last-child { border-right: none; }
+  .tab-btn.active { background: var(--gold); color: var(--charcoal); }
+  .tab-btn:hover:not(.active) { color: var(--gold); }
+  .menu-grid {
+    display: none;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .menu-grid.active { display: grid; }
+  .menu-card {
+    background: var(--charcoal2);
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.4s ease;
+    cursor: default;
+  }
+  .menu-card:hover { transform: translateY(-4px); }
+  .menu-card-img {
+    width: 100%; height: 220px;
+    object-fit: cover;
+    transition: transform 0.6s ease, filter 0.4s ease;
+    filter: brightness(0.88) saturate(1.1);
+  }
+  .menu-card:hover .menu-card-img {
+    transform: scale(1.06);
+    filter: brightness(1) saturate(1.2);
+  }
+  .menu-card-body { padding: 1.5rem; }
+  .menu-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+  .menu-card-name {
+    font-family: var(--display);
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+    flex: 1;
+  }
+  .menu-card-price {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    color: var(--gold);
+    font-style: italic;
+    margin-left: 1rem;
+    white-space: nowrap;
+  }
+  .menu-card-desc {
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    color: rgba(250,248,244,0.6);
+    line-height: 1.6;
+    margin-bottom: 0.9rem;
+  }
+  .menu-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.22rem 0.7rem;
+    border-radius: 99px;
+    font-family: var(--sans);
+  }
+  .tag-vegan    { border: 1px solid #6ab47b; color: #6ab47b; }
+  .tag-gf       { border: 1px solid #c9a84c; color: var(--gold); }
+  .tag-spicy    { border: 1px solid #e07755; color: #e07755; }
+  .tag-featured { border: 1px solid #9b8fc2; color: #b5aad6; }
+
+  /* ─── RESERVATION ───────────────────────────────────────────────── */
+  #reservation {
+    background:
+      linear-gradient(rgba(20,18,14,0.88), rgba(20,18,14,0.88)),
+      url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80') center/cover fixed;
+  }
+  .reservation-inner {
+    max-width: 900px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+  }
+  .reservation-text .section-title { margin-bottom: 1.2rem; }
+  .reservation-text p {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    color: rgba(250,248,244,0.7);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+  .res-info { display: flex; flex-direction: column; gap: 1.1rem; }
+  .res-info-item { display: flex; align-items: center; gap: 0.8rem; }
+  .res-icon {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,168,76,0.4);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 0.9rem; flex-shrink: 0;
+  }
+  .res-info-text { font-size: 0.85rem; color: rgba(250,248,244,0.7); }
+  .res-info-text strong { color: var(--white); display: block; font-size: 0.9rem; }
+  .booking-form {
+    background: rgba(37,35,30,0.9);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 2.5rem;
+    backdrop-filter: blur(10px);
+  }
+  .booking-form h3 {
+    font-family: var(--display);
+    font-size: 1.2rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 1.8rem;
+    color: var(--gold);
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 0.4rem;
+    font-family: var(--sans);
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,76,0.2);
+    color: var(--white);
+    padding: 0.75rem 1rem;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    transition: border-color 0.3s;
+    outline: none;
+    appearance: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--gold); }
+  .form-group select option { background: var(--charcoal2); }
+  .form-group textarea { resize: none; height: 80px; }
+  .form-submit {
+    width: 100%; padding: 1rem;
+    background: var(--gold);
+    color: var(--charcoal);
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .form-submit:hover { background: var(--gold-lt); transform: translateY(-1px); }
+  .form-submit:active { transform: translateY(0); }
+
+  /* ─── TESTIMONIALS ──────────────────────────────────────────────── */
+  #testimonials { background: var(--charcoal3); }
+  .testimonials-header { text-align: center; margin-bottom: 3.5rem; }
+  .testimonials-header .gold-rule { margin: 1.6rem auto; }
+  .testimonials-track {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5px;
+  }
+  .testimonial-card {
+    background: var(--charcoal2);
+    padding: 2.5rem 2rem;
+    position: relative;
+    transition: transform 0.4s;
+  }
+  .testimonial-card:hover { transform: translateY(-4px); }
+  .quote-mark {
+    font-family: var(--serif);
+    font-size: 5rem;
+    line-height: 0.8;
+    color: var(--gold);
+    opacity: 0.3;
+    margin-bottom: 0.5rem;
+    user-select: none;
+  }
+  .testimonial-text {
+    font-family: var(--serif);
+    font-size: 1.08rem;
+    font-style: italic;
+    color: rgba(250,248,244,0.8);
+    line-height: 1.75;
+    margin-bottom: 1.8rem;
+  }
+  .testimonial-author { display: flex; align-items: center; gap: 0.9rem; }
+  .author-avatar {
+    width: 46px; height: 46px; border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(201,168,76,0.3);
+  }
+  .author-name {
+    font-family: var(--display);
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    color: var(--white);
+  }
+  .author-location { font-size: 0.72rem; color: var(--gray); letter-spacing: 0.08em; }
+  .stars { color: var(--gold); font-size: 0.75rem; letter-spacing: 0.1em; margin-bottom: 0.2rem; }
+
+  /* ─── INSTAGRAM ─────────────────────────────────────────────────── */
+  #instagram { background: var(--charcoal); }
+  .insta-header { text-align: center; margin-bottom: 2.5rem; }
+  .insta-handle {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 0.5rem;
+  }
+  .insta-grid {
+    display: grid;
+    grid-template-columns: repeat(6,1fr);
+    gap: 3px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .insta-item {
+    position: relative; overflow: hidden;
+    aspect-ratio: 1;
+    cursor: pointer;
+  }
+  .insta-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease, filter 0.4s ease;
+    filter: brightness(0.88) saturate(1.1);
+  }
+  .insta-item:hover img { transform: scale(1.1); filter: brightness(1) saturate(1.3); }
+  .insta-overlay {
+    position: absolute; inset: 0;
+    background: rgba(20,18,14,0.55);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .insta-item:hover .insta-overlay { opacity: 1; }
+  .insta-overlay svg { width: 28px; height: 28px; fill: white; }
+
+  /* ─── FOOTER ────────────────────────────────────────────────────── */
+  #contact { background: #111009; padding: 0; }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 4rem;
+    max-width: 1200px; margin: 0 auto;
+    padding: 5rem 4rem;
+    border-bottom: 1px solid rgba(201,168,76,0.12);
+  }
+  .footer-brand .nav-logo { font-size: 1.4rem; margin-bottom: 1rem; }
+  .footer-brand p {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-style: italic;
+    color: rgba(250,248,244,0.5);
+    line-height: 1.7;
+    max-width: 300px;
+    margin-bottom: 2rem;
+  }
+  .social-icons { display: flex; gap: 0.8rem; }
+  .social-icon {
+    width: 38px; height: 38px;
+    border: 1px solid rgba(201,168,76,0.3);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gray);
+    font-size: 0.9rem;
+    transition: all 0.3s;
+  }
+  .social-icon:hover { border-color: var(--gold); color: var(--gold); }
+  .social-icon svg { width: 16px; height: 16px; fill: currentColor; }
+  .footer-col h4 {
+    font-family: var(--display);
+    font-size: 0.9rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.6rem;
+    color: var(--gold);
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .footer-col ul li {
+    font-size: 0.85rem;
+    color: rgba(250,248,244,0.55);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .footer-col ul li svg { width: 14px; height: 14px; fill: var(--gold); opacity: 0.7; flex-shrink: 0; }
+  .footer-col ul a { color: rgba(250,248,244,0.55); transition: color 0.3s; }
+  .footer-col ul a:hover { color: var(--gold); }
+  .map-wrap {
+    max-width: 1200px; margin: 0 auto 0;
+    padding: 0 4rem 4rem;
+  }
+  .map-label {
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  .map-frame {
+    width: 100%; height: 300px;
+    border: 1px solid rgba(201,168,76,0.15);
+    filter: grayscale(0.4) contrast(1.05);
+  }
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+    max-width: 1200px; margin: 0 auto;
+    font-size: 0.72rem;
+    color: rgba(250,248,244,0.3);
+    letter-spacing: 0.08em;
+  }
+
+  /* ─── STICKY BOOK BTN ───────────────────────────────────────────── */
+  .sticky-book {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 98;
+    background: var(--gold);
+    color: var(--charcoal);
+    text-align: center;
+    padding: 1rem;
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+    transition: background 0.3s;
+  }
+  .sticky-book:hover { background: var(--gold-lt); }
+
+  /* ─── RESPONSIVE ────────────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    section { padding: 5rem 2.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .about-img { height: 380px; }
+    .reservation-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .testimonials-track { grid-template-columns: 1fr 1fr; }
+    .insta-grid { grid-template-columns: repeat(3,1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+    .map-wrap { padding: 0 2.5rem 3rem; }
+    .footer-bottom { padding: 1.5rem 2.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 1.2rem 1.5rem; }
+    nav.scrolled { padding: 0.9rem 1.5rem; }
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    section { padding: 4rem 1.5rem; }
+    .hero-btns { flex-direction: column; align-items: center; }
+    .btn-primary, .btn-secondary { width: 100%; max-width: 280px; text-align: center; padding: 1.1rem; }
+    .testimonials-track { grid-template-columns: 1fr; }
+    .insta-grid { grid-template-columns: repeat(3,1fr); }
+    .footer-grid { grid-template-columns: 1fr; padding: 3.5rem 1.5rem; }
+    .map-wrap { padding: 0 1.5rem 3rem; }
+    .footer-bottom { padding: 1.5rem; }
+    .sticky-book { display: block; }
+    body { padding-bottom: 60px; }
+    .form-row { grid-template-columns: 1fr; }
+    .about-stats { flex-wrap: wrap; gap: 1.5rem; }
+    .menu-tabs { width: 100%; justify-content: stretch; }
+    .tab-btn { flex: 1; text-align: center; padding: 0.85rem 0.5rem; font-size: 0.65rem; }
+  }
+  @media (max-width: 480px) {
+    .insta-grid { grid-template-columns: repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav id="navbar">
+  <div class="nav-logo">LongHorn <span>Steakhouse</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">Our Story</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#reservation">Reserve</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#reservation" class="nav-cta">Book a Table</a>
+  <div class="hamburger" id="hamburger" aria-label="Menu" role="button" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about"        onclick="closeMobile()">Our Story</a>
+  <a href="#menu"         onclick="closeMobile()">Menu</a>
+  <a href="#reservation"  onclick="closeMobile()">Reserve</a>
+  <a href="#testimonials" onclick="closeMobile()">Reviews</a>
+  <a href="#contact"      onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Davenport, Florida</p>
+    <h1 class="hero-title">Where Every Cut<br>Tells a <em>Story</em></h1>
+    <p class="hero-tagline">Bold flavors, fire-grilled mastery, and a Western spirit — crafted for those who refuse to settle.</p>
+    <div class="hero-btns">
+      <a href="#reservation" class="btn-primary"><span>Book a Table</span></a>
+      <a href="#menu" class="btn-secondary">View Menu</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- ═══════════ ABOUT ═══════════ -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap reveal-left">
+      <img
+        class="about-img"
+        src="https://images.unsplash.com/photo-1558030006-450675393462?w=900&q=80"
+        alt="Chef preparing a premium steak"
+        loading="lazy"
+      />
+      <div class="about-badge">
+        <strong>30+</strong>
+        Years of<br>Excellence
+      </div>
+    </div>
+    <div class="about-text reveal-right">
+      <p class="section-label">Our Heritage</p>
+      <h2 class="section-title">Fire, Craft &amp;<br>Western Soul</h2>
+      <div class="gold-rule"></div>
+      <p>Born from a passion for the open range and the craft of the grill, LongHorn Steakhouse has been bringing the spirit of the American West to every table since 1981. Our Davenport location continues that proud tradition — a place where every guest is welcomed like an old friend.</p>
+      <p>Our chefs source only the freshest, hand-selected cuts, dry-aged to perfection and fire-kissed over real flames. From our legendary Outlaw Ribeye to our seasonal specials, every dish reflects our unwavering commitment to quality, flavor, and heart.</p>
+      <div class="about-stats">
+        <div class="stat-item">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Fresh Ingredients</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">28</div>
+          <div class="stat-label">Signature Cuts</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4.7★</div>
+          <div class="stat-label">Guest Rating</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ MENU ═══════════ -->
+<section id="menu">
+  <div class="menu-header reveal">
+    <p class="section-label">Culinary Excellence</p>
+    <h2 class="section-title">Our Signature Menu</h2>
+    <div class="gold-rule"></div>
+  </div>
+  <div class="menu-tabs reveal">
+    <button class="tab-btn active" onclick="switchTab('appetizers', this)">Appetizers</button>
+    <button class="tab-btn" onclick="switchTab('mains', this)">Mains</button>
+    <button class="tab-btn" onclick="switchTab('desserts', this)">Desserts</button>
+    <button class="tab-btn" onclick="switchTab('drinks', this)">Drinks</button>
+  </div>
+
+  <!-- APPETIZERS -->
+  <div class="menu-grid active" id="tab-appetizers">
+    <div class="menu-card reveal">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1604909052743-94e838986d24?w=700&q=75" alt="Wild West Shrimp" loading="lazy" />
+      <div class="menu-card-body">
+        <div class="menu-card-top">
+          <div class="menu-card-name">Wild West Shrimp</div>
+          <div class="menu-card-price">$14.99</div>
+        </div>
+        <p class="menu-card-desc">Crispy hand-breaded shrimp tossed in our smoky Prairie Dust seasoning, served with jalapeño ranch.</p>
+        <div class="menu-tags"><span class="tag tag-spicy">Spicy</span></div>
+      </div>
+    </div>
+    <div class="menu-card reveal">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1541014741259-de529411b96a?w=700&q=75" alt="Spinach Artichoke Dip" loading="lazy" />
+      <div class="menu-card-body">
+        <div class="menu-card-top">
+          <div class="menu-card-name">Spinach &amp; Artichoke Dip</div>
+          <div class="menu-card-price">$12.49</div>
+        </div>
+        <p class="menu-card-desc">Creamy blended dip with artichoke hearts and pepper jack, served hot with tortilla chips.</p>
+        <div class="menu-tags"><span class="tag tag-vegan">Vegetarian</span><span class="tag tag-gf">Gluten-Free</span></div>
+      </div>
+    </div>
+    <div class="menu-card reveal">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=700&q=75" alt="Seasoned Wings" loading="lazy" />
+      <div class="menu-card-body">
+        <div class="menu-card-top">
+          <div class="menu-card-name">Seasoned Chicken Wings</div>
+          <div class="menu-card-price">$13.99</div>
+        </div>
+        <p class="menu-card-desc">Slow-roasted and crispy-finished wings with three house-made dipping sauces.</p>
+        <div class="menu-tags"><span class="tag tag-featured">Fan Favorite</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAINS -->
+  <div class="menu-grid" id="tab-mains">
+    <div class="menu-card reveal">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=700&q=75" alt="Outlaw Ribeye" loading="lazy" />
+      <div class="menu-card-body">
+        <div class="menu-card-top">
+          <div class="menu-card-name">Outlaw Ribeye® 20oz</div>
+          <div class="menu-card-price">$44.99</div>
+        </div>
+        <p class="menu-card-desc">Our boldest cut. A full 20oz bone-in ribeye, dry-aged and fire-grilled to your desired temperature.</p>
+        <div class="menu-tags"><span class="tag tag-featured">Signature</span><span class="tag tag-gf">Gluten-Free</span></div>
+      </div>
+    </div>
+    <div class="menu-card reveal">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=700&q=75" alt="Flo's Filet" loading="lazy" />
+      <div class="menu-card-body">
+        <div class="menu-card-top">
+          <div class="menu-card-name">Flo's Filet® 6oz</div>
+          <div class="menu-card-price">$34.49</div>
+        </div>
+        <p class="menu-card-desc">Tender, buttery center-cut filet seasoned with our secret blend. The choice of connoisseurs.</p>
+        <div class="menu-tags"><span class="tag tag-featured">Chef's Pick</span><span class="tag tag-gf">Gluten-Free</span></div>
+      </div>
+    </div>
+    <div class="menu-card reveal">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1432139509613-5c4255815697?w=700&q=75" alt="Grilled Salmon" loading="lazy" />
+      <div class="menu-card-body">
+        <div class="menu-card-top">
+          <div class="menu-card-name">Grilled Atlantic Salmon</div>
+          <div class="menu-card-price">$26.99</div>
+        </div>
+        <p class="menu-card-desc">Fresh Atlantic salmon, fire-grilled with a dill butter finish. Served with seasonal vegetables.</p>
+        <div class="menu-tags"><span class="tag tag-gf">Gluten-Free</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESSERTS -->
+  <div class="menu-grid" id="tab-desserts">
+    <div class="menu-card reveal">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=700&q=75" alt="Chocolate Stampede" loading="lazy" />
+      <div class="menu-card-body">
+        <div class="menu-card-top">
+          <div class="menu-card-name">Chocolate Stampede®</div>
+          <div class="menu-card-price">$11.99</div>
+        </div>
+        <p class="menu-card-desc">Six layers of chocolate heaven: cake, ganache, mousse, fudge sauce, and vanilla ice cream.</p>
+        <div class="menu-tags"><span class="tag tag-featured">Legendary</span></div>
+      </div>
+    </div>
+    <div class="menu-card reveal">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=700&q=75" alt="Caramel Apple Goldrush" loading="lazy" />
+      <div class="menu-card-body">
+        <div class="menu-card-top">
+          <div class="menu-card-name">Caramel Apple Goldrush</div>
+          <div class="menu-card-price">$9.99</div>
+        </div>
+        <p class="menu-card-desc">Warm cinnamon-apple compote over a flaky pastry shell, crowned with house-made caramel.</p>
+        <div class="menu-tags"><span class="tag tag-vegan">Vegetarian</span></div>
+      </div>
+    </div>
+    <div class="menu-card reveal">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=700&q=75" alt="Key Lime Pie" loading="lazy" />
+      <div class="menu-card-body">
+        <div class="menu-card-top">
+          <div class="menu-card-name">Florida Key Lime Pie</div>
+          <div class="menu-card-price">$8.99</div>
+        </div>
+        <p class="menu-card-desc">Tangy authentic Key Lime custard in a graham cracker crust, finished with whipped cream.</p>
+        <div class="menu-tags"><span class="tag tag-vegan">Vegetarian</span><span class="tag tag-gf">Gluten-Free</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRINKS -->
+  <div class="menu-grid" id="tab-drinks">
+    <div class="menu-card reveal">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1568644396922-5c3bfae12521?w=700&q=75" alt="LongHorn Lemonade" loading="lazy" />
+      <div class="menu-card-body">
+        <div class="menu-card-top">
+          <div class="menu-card-name">LongHorn Lemonade</div>
+          <div class="menu-card-price">$9.49</div>
+        </div>
+        <p class="menu-card-desc">Tito's Vodka, triple sec, and fresh-squeezed lemonade. Crisp, bright, and unforgettable.</p>
+        <div class="menu-tags"></div>
+      </div>
+    </div>
+    <div class="menu-card reveal">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=700&q=75" alt="Casamigos Margarita" loading="lazy" />
+      <div class="menu-card-body">
+        <div class="menu-card-top">
+          <div class="menu-card-name">Ranch Hand Margarita</div>
+          <div class="menu-card-price">$10.99</div>
+        </div>
+        <p class="menu-card-desc">Casamigos Blanco, Cointreau, fresh lime juice, and a chili-salt rim. Bold as the West.</p>
+        <div class="menu-tags"><span class="tag tag-gf">Gluten-Free</span></div>
+      </div>
+    </div>
+    <div class="menu-card reveal">
+      <img class="menu-card-img" src="https://images.unsplash.com/photo-1510626176961-4b57d4fbad03?w=700&q=75" alt="Craft Beer" loading="lazy" />
+      <div class="menu-card-body">
+        <div class="menu-card-top">
+          <div class="menu-card-name">Craft Beer Selection</div>
+          <div class="menu-card-price">from $6.99</div>
+        </div>
+        <p class="menu-card-desc">Rotating local and national craft taps, hand-chosen to complement our fire-grilled menu.</p>
+        <div class="menu-tags"><span class="tag tag-vegan">Vegan</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ RESERVATION ═══════════ -->
+<section id="reservation">
+  <div class="reservation-inner">
+    <div class="reservation-text reveal-left">
+      <p class="section-label">Reserve Your Experience</p>
+      <h2 class="section-title">Secure Your<br>Table Tonight</h2>
+      <div class="gold-rule"></div>
+      <p>Whether it's an intimate dinner for two or a gathering of friends, we'll have your table ready and waiting. Our team is dedicated to making your visit extraordinary from the first moment you walk through our doors.</p>
+      <div class="res-info">
+        <div class="res-info-item">
+          <div class="res-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z"/></svg>
+          </div>
+          <div class="res-info-text">
+            <strong>8095 Osceola Polk Line Rd</strong>
+            Davenport, FL 33896
+          </div>
+        </div>
+        <div class="res-info-item">
+          <div class="res-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25z"/></svg>
+          </div>
+          <div class="res-info-text">
+            <strong><a href="tel:+18637071616">(863) 707-1616</a></strong>
+            Click to call instantly
+          </div>
+        </div>
+        <div class="res-info-item">
+          <div class="res-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+          </div>
+          <div class="res-info-text">
+            <strong>Mon–Thu: 11am – 10pm</strong>
+            Fri–Sat: 11am – 11pm &nbsp;|&nbsp; Sun: 11am – 9pm
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="booking-form reveal-right">
+      <h3>Make a Reservation</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="John" />
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Smith" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" />
+        </div>
+        <div class="form-group">
+          <label>Time</label>
+          <select>
+            <option>6:00 PM</option>
+            <option>6:30 PM</option>
+            <option>7:00 PM</option>
+            <option>7:30 PM</option>
+            <option>8:00 PM</option>
+            <option>8:30 PM</option>
+            <option>9:00 PM</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Guests</label>
+          <select>
+            <option>1 Guest</option>
+            <option>2 Guests</option>
+            <option>3 Guests</option>
+            <option>4 Guests</option>
+            <option>5 Guests</option>
+            <option>6+ Guests</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" placeholder="(555) 000-0000" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Special Requests</label>
+        <textarea placeholder="Dietary needs, celebrations, seating preferences…"></textarea>
+      </div>
+      <button class="form-submit" onclick="handleBooking(event)">Confirm Reservation</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TESTIMONIALS ═══════════ -->
+<section id="testimonials">
+  <div class="testimonials-header reveal">
+    <p class="section-label">Guest Experiences</p>
+    <h2 class="section-title">What Our Guests Say</h2>
+    <div class="gold-rule"></div>
+  </div>
+  <div class="testimonials-track">
+    <div class="testimonial-card reveal">
+      <div class="quote-mark">"</div>
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">The Outlaw Ribeye was an absolute masterpiece. Perfectly seared, melt-in-your-mouth texture — I've dined at steakhouses across the country and this genuinely rivals them all.</p>
+      <div class="testimonial-author">
+        <img class="author-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Marcus T." loading="lazy" />
+        <div>
+          <div class="author-name">Marcus T.</div>
+          <div class="author-location">Orlando, FL</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="quote-mark">"</div>
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">We celebrated our anniversary here and the staff went above and beyond. Warm ambiance, impeccable service, and the Chocolate Stampede dessert is absolutely legendary.</p>
+      <div class="testimonial-author">
+        <img class="author-avatar" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sophia M." loading="lazy" />
+        <div>
+          <div class="author-name">Sophia M.</div>
+          <div class="author-location">Kissimmee, FL</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="quote-mark">"</div>
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">Best steakhouse near Disney World, hands down. Flo's Filet was cooked to an exact medium-rare, and the server knew the menu inside out. We'll be back every visit to Florida.</p>
+      <div class="testimonial-author">
+        <img class="author-avatar" src="https://randomuser.me/api/portraits/men/65.jpg" alt="David K." loading="lazy" />
+        <div>
+          <div class="author-name">David K.</div>
+          <div class="author-location">Chicago, IL</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ INSTAGRAM ═══════════ -->
+<section id="instagram" style="padding-top:5rem;padding-bottom:5rem;">
+  <div class="insta-header reveal">
+    <p class="section-label">Follow the Flame</p>
+    <h2 class="section-title">@LongHornSteakhouse</h2>
+    <div class="insta-handle">#LongHornSteakhouse &nbsp;·&nbsp; Tag us in your photos</div>
+  </div>
+  <div class="insta-grid reveal">
+    <div class="insta-item">
+      <img src="https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=400&q=70" alt="Instagram 1" loading="lazy" />
+      <div class="insta-overlay"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div>
+    </div>
+    <div class="insta-item">
+      <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=70" alt="Instagram 2" loading="lazy" />
+      <div class="insta-overlay"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div>
+    </div>
+    <div class="insta-item">
+      <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=400&q=70" alt="Instagram 3" loading="lazy" />
+      <div class="insta-overlay"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div>
+    </div>
+    <div class="insta-item">
+      <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&q=70" alt="Instagram 4" loading="lazy" />
+      <div class="insta-overlay"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div>
+    </div>
+    <div class="insta-item">
+      <img src="https://images.unsplash.com/photo-1606851091851-e8c8c0fca5ba?w=400&q=70" alt="Instagram 5" loading="lazy" />
+      <div class="insta-overlay"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div>
+    </div>
+    <div class="insta-item">
+      <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?w=400&q=70" alt="Instagram 6" loading="lazy" />
+      <div class="insta-overlay"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer id="contact">
+  <div class="footer-grid">
+    <div class="footer-brand reveal-left">
+      <div class="nav-logo" style="margin-bottom:1rem;">LongHorn <span>Steakhouse</span></div>
+      <p>Fire-grilled excellence and genuine Western hospitality — where great meals become lasting memories.</p>
+      <div class="social-icons">
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/LongHornSteakhouse" class="social-icon" target="_blank" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/longhornsteakhouse" class="social-icon" target="_blank" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <!-- Twitter/X -->
+        <a href="https://twitter.com/LongHornSteak" class="social-icon" target="_blank" aria-label="X / Twitter">
+          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <!-- Yelp -->
+        <a href="https://www.yelp.com/biz/longhorn-steakhouse-davenport" class="social-icon" target="_blank" aria-label="Yelp">
+          <svg viewBox="0 0 24 24"><path d="M20.16 12.594l-4.995 1.452c-.557.162-.982-.309-.673-.883l2.477-4.522c.304-.556.982-.608 1.383-.164l2.519 3.07c.398.442.288 1.019-.711 1.047zm-7.507 4.888l-.903 4.994c-.107.588-.714.828-1.186.523l-4.121-2.665c-.477-.308-.562-.988-.002-1.32l4.348-2.962c.608-.414 1.195-.043 1.196.706l.668.724zm-2.042-9.76L8.044 3.117c-.3-.528.015-1.129.609-1.142l5.13-.113c.594-.013.946.576.671 1.117l-2.552 5.023c-.327.643-1.009.618-1.289-.26zM4.05 12.178l-2.79 3.89c-.322.449-.081 1.046.44 1.156l4.956 1.051c.52.11.955-.352.775-.852l-1.694-4.942c-.219-.636-.941-.812-1.687-.303zm9.073-1.81l4.874-1.813c.542-.202.693.341.397.789L14.68 13.74c-.298.447-.91.421-1.133-.044l-1.396-2.956c-.22-.464.044-.857.972-1.372z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col reveal">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#about">Our Story</a></li>
+        <li><a href="#menu">Full Menu</a></li>
+        <li><a href="#reservation">Reservations</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="tel:+18637071616">Call Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col reveal-right">
+      <h4>Visit Us</h4>
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          8095 Osceola Polk Line Rd, Davenport, FL 33896
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          <a href="tel:+18637071616">(863) 707-1616</a>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+          Mon–Thu 11am–10pm
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+          Fri–Sat 11am–11pm &nbsp;|&nbsp; Sun 11am–9pm
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- GOOGLE MAP -->
+  <div class="map-wrap reveal">
+    <div class="map-label">Find Us</div>
+    <iframe
+      class="map-frame"
+      title="LongHorn Steakhouse Davenport FL"
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3507.123!2d-81.6!3d28.26!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88dd7b9b2d6deff5%3A0x2b9a64a58aa82345!2sLongHorn%20Steakhouse!5e0!3m2!1sen!2sus!4v1700000000000"
+      width="100%" height="300" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2025 LongHorn Steakhouse — Davenport, FL. All rights reserved.</span>
+    <span>Crafted with ♥ for bold flavors &amp; genuine hospitality</span>
+  </div>
+</footer>
+
+<!-- STICKY MOBILE BOOK BTN -->
+<a href="#reservation" class="sticky-book">🔥 Book a Table Now</a>
+
+<!-- ═══════════ JAVASCRIPT ═══════════ -->
+<script>
+  /* ── Navbar scroll ── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  /* ── Hamburger ── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  function closeMobile() { mobileMenu.classList.remove('open'); }
+
+  /* ── Menu tabs ── */
+  function switchTab(id, btn) {
+    document.querySelectorAll('.menu-grid').forEach(g => g.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+    // Re-trigger reveals on newly shown cards
+    document.querySelectorAll('#tab-' + id + ' .reveal').forEach((el, i) => {
+      el.classList.remove('visible');
+      setTimeout(() => el.classList.add('visible'), i * 80);
+    });
+  }
+
+  /* ── Intersection Observer ── */
+  const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => observer.observe(el));
+
+  /* ── Booking form ── */
+  function handleBooking(e) {
+    e.preventDefault();
+    const btn = e.target;
+    btn.textContent = '✓ Reservation Confirmed!';
+    btn.style.background = '#4a7c59';
+    btn.style.color = '#fff';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = 'Confirm Reservation';
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.disabled = false;
+    }, 3500);
+  }
+
+  /* ── Active nav link on scroll ── */
+  const sections = document.querySelectorAll('section[id], footer[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 140) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current
+        ? 'var(--gold)' : '';
+    });
+  }, { passive: true });
+</script>
+</body>
+</html>
